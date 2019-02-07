@@ -1,9 +1,11 @@
+# Additions
+.DS_Store
+
 # From https://github.com/github/gitignore/blob/master/Unity.gitignore
 
 [Ll]ibrary/
 [Tt]emp/
 [Oo]bj/
-[Bb]uild/
 [Bb]uilds/
 [Ll]ogs/
 
