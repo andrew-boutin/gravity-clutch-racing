@@ -10,8 +10,7 @@ public class Respawnable : MonoBehaviour {
 	private Vector3 spawnLocation;
 	private Quaternion spawnRotation;
 
-	// Use this for initialization
-	void Start () {
+	void Awake () {
 		spawnLocation = this.transform.position;
 		spawnRotation = this.transform.rotation;
 	}
