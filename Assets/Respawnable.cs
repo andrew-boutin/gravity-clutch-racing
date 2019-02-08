@@ -9,7 +9,7 @@ public class Respawnable : MonoBehaviour {
 	private Rigidbody rb;
 	private GravityShiftable gravityShiftable;
 
-	void Awake () {
+	void Start () {
 		spawnLocation = this.transform.position;
 		spawnRotation = this.transform.rotation;
 		rb = GetComponent<Rigidbody> ();

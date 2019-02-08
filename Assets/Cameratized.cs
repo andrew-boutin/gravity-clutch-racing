@@ -5,14 +5,25 @@ using UnityEngine;
 // Add this to an object if you want to be able to control the cameras
 // on it.
 public class Cameratized : MonoBehaviour {
-	// TODO: Track starting camera and start with that one enabled
-	// TODO: Reset to starting camera
 	private Camera[] cameras;
 
 	private int curCameraIdx = 0;
 
-	private void Awake() {
+	void Start() {
 		cameras = FindObjectsOfType<Camera>();
+
+		if (cameras.Length > 0) {
+			Camera mainCamera = Camera.main;
+			for (int i = 0; i < cameras.Length; i++) {
+				Camera curCamera = cameras [i];
+				if (curCamera == mainCamera) {
+					cameras [i] = cameras [0];
+					cameras [0] = curCamera;
+				} else {
+					curCamera.enabled = false;
+				}
+			}
+		}
 	}
 
 	public void NextCamera() {
@@ -24,7 +35,7 @@ public class Cameratized : MonoBehaviour {
 			return;
 		}
 
-		cameras [curCameraIdx].enabled = false;
+		int oldIdx = curCameraIdx;
 		curCameraIdx++;
 
 		if(curCameraIdx >= cameras.Length){
@@ -32,5 +43,12 @@ public class Cameratized : MonoBehaviour {
 		}
 
 		cameras [curCameraIdx].enabled = true;
+		cameras [oldIdx].enabled = false;
+	}
+
+	public void ResetCamera() {
+		cameras [0].enabled = true;
+		cameras [curCameraIdx].enabled = false;
+		curCameraIdx = 0;
 	}
 }
