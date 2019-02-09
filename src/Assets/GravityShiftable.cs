@@ -80,4 +80,9 @@ public class GravityShiftable : MonoBehaviour {
 	public void ShiftGravityCounterClockwise() {
 		currentGravityDirection = counterClockwiseGravityDirections [currentGravityDirection];
 	}
+
+	// Expose a method that can be invoked by a UnityEvent.
+	public void OnRespawn() {
+		ResetGravityDirection ();
+	}
 }

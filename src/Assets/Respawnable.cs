@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 // Add this to an object if you want it to have the ability to be respawned.
 public class Respawnable : MonoBehaviour {
@@ -8,6 +9,9 @@ public class Respawnable : MonoBehaviour {
 	private Quaternion spawnRotation;
 	private Rigidbody rb;
 	private GravityShiftable gravityShiftable;
+
+	[SerializeField]
+	private UnityEvent onRespawnEvent;
 
 	void Start () {
 		spawnLocation = this.transform.position;
@@ -24,9 +28,9 @@ public class Respawnable : MonoBehaviour {
 			rb.velocity = Vector3.zero;
 			rb.angularVelocity = Vector3.zero;
 		}
-		if (gravityShiftable) {
-			gravityShiftable.ResetGravityDirection ();
-		}
+
+		// Let anything registered as a listener know
+		onRespawnEvent.Invoke();
 	}
 
 	public void UpdateRespawn(Vector3 targetSpawnLocation, Quaternion targetSpawnRotation) {

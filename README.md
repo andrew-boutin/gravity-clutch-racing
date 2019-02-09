@@ -4,8 +4,6 @@ Gravity Clutch Racing (GCR) is a racing game where you use the `gravity clutch` 
 
 [Play](https://andrew-boutin.github.io/gravity-clutch-racing/) on GitHub Pages!
 
-## Development
-
 Created with [Unity](https://unity3d.com/).
 
 ---
