@@ -4,11 +4,11 @@ using UnityEngine;
 using UnityEngine.Events;
 
 // Add this to an object if you want it to have the ability to be respawned.
+// It will fire off an event on respawn that is subscribable.
 public class Respawnable : MonoBehaviour {
 	private Vector3 spawnLocation;
 	private Quaternion spawnRotation;
 	private Rigidbody rb;
-	private GravityShiftable gravityShiftable;
 
 	[SerializeField]
 	private UnityEvent onRespawnEvent;
@@ -17,7 +17,6 @@ public class Respawnable : MonoBehaviour {
 		spawnLocation = this.transform.position;
 		spawnRotation = this.transform.rotation;
 		rb = GetComponent<Rigidbody> ();
-		gravityShiftable = GetComponent<GravityShiftable> ();
 	}
 
 	public void Respawn() {
@@ -29,7 +28,7 @@ public class Respawnable : MonoBehaviour {
 			rb.angularVelocity = Vector3.zero;
 		}
 
-		// Let anything registered as a listener know
+		// Let anything registered as a listener know.
 		onRespawnEvent.Invoke();
 	}
 

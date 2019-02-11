@@ -4,7 +4,9 @@ using UnityEngine;
 
 // Add this script to an object if you want to be able to change the direction of
 // gravity for that object. There are four different directions of gravity: up,
-// down, left, and right.
+// down, left, and right. Gravity is simulated through applying forces to a
+// rigidbody.
+[RequireComponent(typeof(Rigidbody))]
 public class GravityShiftable : MonoBehaviour {
 	// TODO: Notify when gravity shifts in case something is in charge of rotating the object etc.?
 	// down Quaternion.Euler (0, 90, 0); up Quaternion.Euler (0, 90, 180);
@@ -53,6 +55,7 @@ public class GravityShiftable : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		currentGravityDirection = StartingGravityDirection;
+
 		rb = GetComponent<Rigidbody>();
 	}
 
@@ -69,7 +72,7 @@ public class GravityShiftable : MonoBehaviour {
 		currentGravityDirection = targetDirection;
 	}
 
-	public void FlipGravityDirection() {
+	public void InvertGravityDirection() {
 		currentGravityDirection = oppositeGravityDirections [currentGravityDirection];
 	}
 
