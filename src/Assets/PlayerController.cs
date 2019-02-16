@@ -6,6 +6,7 @@ using UnityEngine;
 // things like key inputs.
 [RequireComponent(typeof(Cameratized))]
 [RequireComponent(typeof(Respawnable))]
+[RequireComponent(typeof(GravityShiftable))]
 [RequireComponent(typeof(VehicleController))]
 public class PlayerController : MonoBehaviour {
 	private Cameratized cameratized;
@@ -31,7 +32,7 @@ public class PlayerController : MonoBehaviour {
 			respawnable.Respawn ();
 		}
 
-		// TODO: Should these technically be controls of the vehicle?
+		// TODO: Call from vehicleController after adding the functionality there
 		// Gravity controls
 		if (Input.GetKeyDown ("up")) {
 			gravityShiftable.InvertGravityDirection ();
@@ -40,8 +41,6 @@ public class PlayerController : MonoBehaviour {
 		} else if (Input.GetKeyDown ("left")) {
 			gravityShiftable.ShiftGravityCounterClockwise ();
 		}
-
-
 
 		// Vehicle movement
 		// TODO: Potentially use an axis input instead for a/d

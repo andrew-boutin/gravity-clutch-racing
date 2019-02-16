@@ -4,6 +4,7 @@ using UnityEngine;
 
 // Exposes functionality to control a vehicle.
 [RequireComponent(typeof(GravityShiftable))]
+[RequireComponent(typeof(Rigidbody))]
 public class VehicleController : MonoBehaviour {
 	private GravityShiftable gravityShiftable;
 	private Rigidbody rb;
@@ -12,11 +13,25 @@ public class VehicleController : MonoBehaviour {
 
 	private bool rotate;
 
-	private float rotationBreakPoint = 0.5f;
+	[SerializeField]
+	private float BrakeDamper = 0.95f;
 
-	private float rotationSpeed = 0.003f;
+	[SerializeField]
+	private float BrakeBreakPoint = 0.5f;
 
-	private Quaternion targetQuaternion;
+	[SerializeField]
+	private float ForwardSpeedFactor = 20.0f;
+
+	[SerializeField]
+	private float TurnSpeedFactor = 10.0f;
+
+	[SerializeField]
+	private float RotationBreakPoint = 0.5f;
+
+	[SerializeField]
+	private float RotationSpeed = 0.003f;
+
+	private Quaternion targetRotation;
 
 	// Use this for initialization
 	void Start () {
@@ -28,27 +43,32 @@ public class VehicleController : MonoBehaviour {
 
 	void FixedUpdate() {
 		if (brake) {
-			rb.velocity = rb.velocity * 0.95f;
+			rb.velocity = rb.velocity * BrakeDamper;
+
+			if (Mathf.Abs(rb.velocity.z) < BrakeBreakPoint) {
+				rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y, 0);
+			}
 		} else {
-			rb.AddForce(Vector3.forward * rb.mass * 20);
+			// TODO: Only do this if "grounded".
+			rb.AddForce(Vector3.forward * rb.mass * ForwardSpeedFactor);
 		}
 
 		if (rotate) {
-			transform.rotation = Quaternion.Lerp(transform.rotation, targetQuaternion, Time.time * rotationSpeed);
+			transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.time * RotationSpeed);
 
-			if (Mathf.Abs (transform.rotation.eulerAngles.z - targetQuaternion.eulerAngles.z) < rotationBreakPoint) {
+			if (Mathf.Abs (transform.rotation.eulerAngles.z - targetRotation.eulerAngles.z) < RotationBreakPoint) {
 				rotate = false;
-				transform.rotation = targetQuaternion;
+				transform.rotation = targetRotation;
 			}
 		}
 	}
 
 	public void MoveRight() {
-		rb.AddForce(transform.right * rb.mass * 10);
+		rb.AddForce(transform.right * rb.mass * TurnSpeedFactor);
 	}
 
 	public void MoveLeft() {
-		rb.AddForce((-transform.right) * rb.mass * 10);
+		rb.AddForce((-transform.right) * rb.mass * TurnSpeedFactor);
 	}
 
 	public void ApplyBrake() {
@@ -63,7 +83,11 @@ public class VehicleController : MonoBehaviour {
 	// the gravity direction is changed. This will rotate the vehicle so the wheels
 	// are orientated with the new direction of gravity.
 	public void RotateWithGravity() {
-		targetQuaternion = gravityShiftable.GetCurrentQuaternion ();
+		targetRotation = gravityShiftable.GetCurrentRotation ();
 		rotate = true;
 	}
+
+	// TODO: Expose functions to change gravity direction. Call gravityShiftable methods.
+	// Then change rotation here instead of in RotateWithGravity. Can potentially remove
+	// gravityShiftable from PlayerController and AIController.
 }

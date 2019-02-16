@@ -6,11 +6,12 @@ public class Menu : MonoBehaviour {
 	private bool paused;
 	private float timeScale;
 
-	public GameObject menu;
+	[SerializeField]
+	private GameObject pausedMenuObject;
 
 	// Use this for initialization
 	void Start () {
-		menu.SetActive (false);
+		pausedMenuObject.SetActive (false);
 		paused = false;
 		timeScale = Time.timeScale;
 	}
@@ -21,11 +22,11 @@ public class Menu : MonoBehaviour {
 			
 			if (paused) {
 				Time.timeScale = timeScale;
-				menu.SetActive(false);
+				pausedMenuObject.SetActive(false);
 			} else {
 				timeScale = Time.timeScale;
 				Time.timeScale = 0f;
-				menu.SetActive(true);
+				pausedMenuObject.SetActive(true);
 			}
 
 			paused = !paused;

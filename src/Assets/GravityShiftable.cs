@@ -13,7 +13,11 @@ public class GravityShiftable : MonoBehaviour {
 
 	public enum GravityDirection { Down, Up, Left, Right };
 
-	public GravityDirection StartingGravityDirection = GravityDirection.Down;
+	[SerializeField]
+	private UnityEvent onGravityChange;
+
+	[SerializeField]
+	private GravityDirection StartingGravityDirection = GravityDirection.Down;
 
 	private GravityDirection currentGravityDirection;
 
@@ -41,7 +45,6 @@ public class GravityShiftable : MonoBehaviour {
 		{ GravityDirection.Right, GravityDirection.Down }
 	};
 
-	// TODO: This need tweaking
 	private Dictionary<GravityDirection, Vector3> vectorFromDirection = new Dictionary<GravityDirection, Vector3>()
 	{
 		{ GravityDirection.Up, new Vector3 (0.0f, 9.81f, 0.0f) },
@@ -58,9 +61,6 @@ public class GravityShiftable : MonoBehaviour {
 		{ GravityDirection.Right, Quaternion.Euler (0, 0, -90) }
 	};
 
-	[SerializeField]
-	private UnityEvent onGravityChange;
-
 	// Use this for initialization
 	void Start () {
 		currentGravityDirection = StartingGravityDirection;
@@ -75,11 +75,6 @@ public class GravityShiftable : MonoBehaviour {
 		
 	public void ResetGravityDirection() {
 		updateGravityDirection (StartingGravityDirection);
-	}
-
-	// TODO: Where is this used?
-	public void SetGravityDirection(GravityDirection targetDirection) {
-		updateGravityDirection (targetDirection);
 	}
 
 	public void InvertGravityDirection() {
@@ -102,12 +97,14 @@ public class GravityShiftable : MonoBehaviour {
 		onGravityChange.Invoke ();
 	}
 
-	// Expose a method that can be invoked by a UnityEvent.
+	// Expose a method that can be invoked by a UnityEvent to define gravity behavior on
+	// respawn.
 	public void OnRespawn() {
 		ResetGravityDirection ();
 	}
 
-	public Quaternion GetCurrentQuaternion() {
+	// This will return the rotation that is oriented to the current direction of gravity.
+	public Quaternion GetCurrentRotation() {
 		return quaternionFromDirection[currentGravityDirection];
 	}
 }

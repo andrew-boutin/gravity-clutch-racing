@@ -5,6 +5,7 @@ using UnityEngine;
 // Add this to an object if you want to be able to control the cameras
 // on it.
 public class Cameratized : MonoBehaviour {
+	// TODO: Need to be able to specify which camera to start with
 	private Camera[] cameras;
 
 	private int curCameraIdx = 0;
