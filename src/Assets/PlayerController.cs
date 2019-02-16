@@ -6,19 +6,16 @@ using UnityEngine;
 // things like key inputs.
 [RequireComponent(typeof(Cameratized))]
 [RequireComponent(typeof(Respawnable))]
-[RequireComponent(typeof(GravityShiftable))]
 [RequireComponent(typeof(VehicleController))]
 public class PlayerController : MonoBehaviour {
 	private Cameratized cameratized;
 	private Respawnable respawnable;
-	private GravityShiftable gravityShiftable;
 	private VehicleController vehicleController;
 
 	// Use this for initialization
 	void Start () {
 		cameratized = GetComponent<Cameratized> ();
 		respawnable = GetComponent<Respawnable> ();
-		gravityShiftable = GetComponent<GravityShiftable> ();
 		vehicleController = GetComponent<VehicleController> ();
 	}
 	
@@ -32,14 +29,13 @@ public class PlayerController : MonoBehaviour {
 			respawnable.Respawn ();
 		}
 
-		// TODO: Call from vehicleController after adding the functionality there
 		// Gravity controls
 		if (Input.GetKeyDown ("up")) {
-			gravityShiftable.InvertGravityDirection ();
+			vehicleController.InvertGravity ();
 		} else if (Input.GetKeyDown ("right")) {
-			gravityShiftable.ShiftGravityClockwise ();
+			vehicleController.ShiftGravityClockwise ();
 		} else if (Input.GetKeyDown ("left")) {
-			gravityShiftable.ShiftGravityCounterClockwise ();
+			vehicleController.ShiftGravityCounterClockwise ();
 		}
 
 		// Vehicle movement

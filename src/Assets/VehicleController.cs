@@ -29,7 +29,7 @@ public class VehicleController : MonoBehaviour {
 	private float RotationBreakPoint = 0.5f;
 
 	[SerializeField]
-	private float RotationSpeed = 0.003f;
+	private float RotationSpeed = 5.0f;
 
 	private Quaternion targetRotation;
 
@@ -42,9 +42,12 @@ public class VehicleController : MonoBehaviour {
 	}
 
 	void FixedUpdate() {
+		// We're either braking or defaulting to forward movement.
 		if (brake) {
-			rb.velocity = rb.velocity * BrakeDamper;
+			rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y, rb.velocity.z * BrakeDamper);
 
+			// Remove all forward velocity if the current value is very close to 0 so we don't slowly
+			// approach 0 forever.
 			if (Mathf.Abs(rb.velocity.z) < BrakeBreakPoint) {
 				rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y, 0);
 			}
@@ -53,12 +56,12 @@ public class VehicleController : MonoBehaviour {
 			rb.AddForce(Vector3.forward * rb.mass * ForwardSpeedFactor);
 		}
 
+		// Handle rotating the vehicle.
 		if (rotate) {
-			transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.time * RotationSpeed);
+			transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, RotationSpeed);
 
-			if (Mathf.Abs (transform.rotation.eulerAngles.z - targetRotation.eulerAngles.z) < RotationBreakPoint) {
+			if (transform.rotation == targetRotation) {
 				rotate = false;
-				transform.rotation = targetRotation;
 			}
 		}
 	}
@@ -79,15 +82,26 @@ public class VehicleController : MonoBehaviour {
 		brake = false;
 	}
 
-	// This is a method that can be hooked up to an event that gets triggered when
-	// the gravity direction is changed. This will rotate the vehicle so the wheels
-	// are orientated with the new direction of gravity.
-	public void RotateWithGravity() {
+	// This will rotate the vehicle so the wheels are orientated with the direction of gravity.
+	private void rotateWithGravity() {
 		targetRotation = gravityShiftable.GetCurrentRotation ();
 		rotate = true;
 	}
 
-	// TODO: Expose functions to change gravity direction. Call gravityShiftable methods.
-	// Then change rotation here instead of in RotateWithGravity. Can potentially remove
-	// gravityShiftable from PlayerController and AIController.
+	// Changing gravity is considered part of the vehicle's functionality since each
+	// vehicle does this independently.
+	public void InvertGravity() {
+		gravityShiftable.InvertGravityDirection ();
+		rotateWithGravity ();
+	}
+
+	public void ShiftGravityClockwise() {
+		gravityShiftable.ShiftGravityClockwise ();
+		rotateWithGravity ();
+	}
+
+	public void ShiftGravityCounterClockwise() {
+		gravityShiftable.ShiftGravityCounterClockwise ();
+		rotateWithGravity ();
+	}
 }

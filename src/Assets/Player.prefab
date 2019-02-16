@@ -1185,12 +1185,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 616563c4d87b248feba0572a4b7b85a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  StartingGravityDirection: 0
   onGravityChange:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 114771933035334986}
-        m_MethodName: RotateWithGravity
+      - m_Target: {fileID: 0}
+        m_MethodName: 
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1202,6 +1201,7 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
       Culture=neutral, PublicKeyToken=null
+  StartingGravityDirection: 0
 --- !u!114 &114105121796485806
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1251,6 +1251,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dfd4f6ab9ffc043c9872c904f35afcf9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  BrakeDamper: 0.95
+  BrakeBreakPoint: 0.5
+  ForwardSpeedFactor: 20
+  TurnSpeedFactor: 10
+  RotationBreakPoint: 0.5
+  RotationSpeed: 5
 --- !u!124 &124286146460086876
 Behaviour:
   m_ObjectHideFlags: 1

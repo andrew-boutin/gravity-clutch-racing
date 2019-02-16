@@ -5,6 +5,7 @@ using UnityEngine.Events;
 
 // Add this to an object if you want it to have the ability to be respawned.
 // It will fire off an event on respawn that is subscribable.
+// Don't require the rigidbody so this will work on objects without them too.
 public class Respawnable : MonoBehaviour {
 	private Vector3 spawnLocation;
 	private Quaternion spawnRotation;
