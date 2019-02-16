@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 // Add this script to an object if you want to be able to change the direction of
 // gravity for that object. There are four different directions of gravity: up,
@@ -8,10 +9,6 @@ using UnityEngine;
 // rigidbody.
 [RequireComponent(typeof(Rigidbody))]
 public class GravityShiftable : MonoBehaviour {
-	// TODO: Notify when gravity shifts in case something is in charge of rotating the object etc.?
-	// down Quaternion.Euler (0, 90, 0); up Quaternion.Euler (0, 90, 180);
-	// left Quaternion.Euler (0, 90, -90); right Quaternion.Euler (0, 90, 90);
-
 	private Rigidbody rb;
 
 	public enum GravityDirection { Down, Up, Left, Right };
@@ -44,6 +41,7 @@ public class GravityShiftable : MonoBehaviour {
 		{ GravityDirection.Right, GravityDirection.Down }
 	};
 
+	// TODO: This need tweaking
 	private Dictionary<GravityDirection, Vector3> vectorFromDirection = new Dictionary<GravityDirection, Vector3>()
 	{
 		{ GravityDirection.Up, new Vector3 (0.0f, 9.81f, 0.0f) },
@@ -51,6 +49,17 @@ public class GravityShiftable : MonoBehaviour {
 		{ GravityDirection.Left, new Vector3 (9.81f, 0.0f, 0.0f) },
 		{ GravityDirection.Right, new Vector3 (-9.81f, 0.0f, 0.0f) }
 	};
+
+	private Dictionary<GravityDirection, Quaternion> quaternionFromDirection = new Dictionary<GravityDirection, Quaternion>()
+	{
+		{ GravityDirection.Up, Quaternion.Euler (0, 0, 180) },
+		{ GravityDirection.Down, Quaternion.Euler (0, 0, 0) },
+		{ GravityDirection.Left, Quaternion.Euler (0, 0, 90) },
+		{ GravityDirection.Right, Quaternion.Euler (0, 0, -90) }
+	};
+
+	[SerializeField]
+	private UnityEvent onGravityChange;
 
 	// Use this for initialization
 	void Start () {
@@ -65,27 +74,40 @@ public class GravityShiftable : MonoBehaviour {
 	}
 		
 	public void ResetGravityDirection() {
-		currentGravityDirection = StartingGravityDirection;
+		updateGravityDirection (StartingGravityDirection);
 	}
 
+	// TODO: Where is this used?
 	public void SetGravityDirection(GravityDirection targetDirection) {
-		currentGravityDirection = targetDirection;
+		updateGravityDirection (targetDirection);
 	}
 
 	public void InvertGravityDirection() {
-		currentGravityDirection = oppositeGravityDirections [currentGravityDirection];
+		updateGravityDirection (oppositeGravityDirections [currentGravityDirection]);
 	}
 
 	public void ShiftGravityClockwise() {
-		currentGravityDirection = clockwiseGravityDirections [currentGravityDirection];
+		updateGravityDirection (clockwiseGravityDirections [currentGravityDirection]);
 	}
 
 	public void ShiftGravityCounterClockwise() {
-		currentGravityDirection = counterClockwiseGravityDirections [currentGravityDirection];
+		updateGravityDirection (counterClockwiseGravityDirections [currentGravityDirection]);
+	}
+
+	// Change the current gravity direction to the desired one and invoke a Unity method
+	// that others can subscribe to so they can have their own additional logic when
+	// this changes.
+	private void updateGravityDirection(GravityDirection targetGravityDirection) {
+		currentGravityDirection = targetGravityDirection;
+		onGravityChange.Invoke ();
 	}
 
 	// Expose a method that can be invoked by a UnityEvent.
 	public void OnRespawn() {
 		ResetGravityDirection ();
+	}
+
+	public Quaternion GetCurrentQuaternion() {
+		return quaternionFromDirection[currentGravityDirection];
 	}
 }

@@ -5,7 +5,6 @@ using UnityEngine;
 // Provides AI behavior. For example this would decide when to
 // turn, shift the gravity, etc.
 [RequireComponent(typeof(Respawnable))]
-[RequireComponent(typeof(GravityShiftable))]
 [RequireComponent(typeof(VehicleController))]
 public class AIController : MonoBehaviour {
 	private Respawnable respawnable;

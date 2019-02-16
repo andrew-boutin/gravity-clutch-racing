@@ -1118,7 +1118,7 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 48
+  m_Constraints: 112
   m_CollisionDetection: 0
 --- !u!65 &65059744254131782
 BoxCollider:
@@ -1186,6 +1186,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   StartingGravityDirection: 0
+  onGravityChange:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 114771933035334986}
+        m_MethodName: RotateWithGravity
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
 --- !u!114 &114105121796485806
 MonoBehaviour:
   m_ObjectHideFlags: 1
