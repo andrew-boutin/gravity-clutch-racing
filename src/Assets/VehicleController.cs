@@ -10,11 +10,20 @@ public class VehicleController : MonoBehaviour {
 
 	private bool brake;
 
+	private bool rotate;
+
+	private float rotationBreakPoint = 0.5f;
+
+	private float rotationSpeed = 0.003f;
+
+	private Quaternion targetQuaternion;
+
 	// Use this for initialization
 	void Start () {
 		gravityShiftable = GetComponent<GravityShiftable> ();
 		rb = GetComponent<Rigidbody> ();
 		brake = false;
+		rotate = false;
 	}
 
 	void FixedUpdate() {
@@ -23,17 +32,22 @@ public class VehicleController : MonoBehaviour {
 		} else {
 			rb.AddForce(Vector3.forward * rb.mass * 20);
 		}
+
+		if (rotate) {
+			transform.rotation = Quaternion.Lerp(transform.rotation, targetQuaternion, Time.time * rotationSpeed);
+
+			if (Mathf.Abs (transform.rotation.eulerAngles.z - targetQuaternion.eulerAngles.z) < rotationBreakPoint) {
+				rotate = false;
+				transform.rotation = targetQuaternion;
+			}
+		}
 	}
 
 	public void MoveRight() {
-		// TODO: Vector relative to the transform instead of fixed
-//		rb.AddForce(Vector3.right * rb.mass * 10);
 		rb.AddForce(transform.right * rb.mass * 10);
 	}
 
 	public void MoveLeft() {
-		// TODO: Vector relative to the transform instead of fixed
-//		rb.AddForce(Vector3.left * rb.mass * 10);
 		rb.AddForce((-transform.right) * rb.mass * 10);
 	}
 
@@ -49,8 +63,7 @@ public class VehicleController : MonoBehaviour {
 	// the gravity direction is changed. This will rotate the vehicle so the wheels
 	// are orientated with the new direction of gravity.
 	public void RotateWithGravity() {
-		// TODO: Will need to make this a slow rotation over time instead of instant.
-		Quaternion targetQuaternion = gravityShiftable.GetCurrentQuaternion ();
-		this.transform.rotation = targetQuaternion;
+		targetQuaternion = gravityShiftable.GetCurrentQuaternion ();
+		rotate = true;
 	}
 }
