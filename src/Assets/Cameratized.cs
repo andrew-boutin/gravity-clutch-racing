@@ -5,7 +5,9 @@ using UnityEngine;
 // Add this to an object if you want to be able to control the cameras
 // on it.
 public class Cameratized : MonoBehaviour {
-	// TODO: Need to be able to specify which camera to start with
+	[SerializeField]
+	private Camera defaultCamera;
+
 	private Camera[] cameras;
 
 	private int curCameraIdx = 0;
@@ -13,13 +15,15 @@ public class Cameratized : MonoBehaviour {
 	void Start() {
 		cameras = FindObjectsOfType<Camera>();
 
+		// Make defaultCamera the index 0 camera if set, default to the main camera if not
 		if (cameras.Length > 0) {
-			Camera mainCamera = Camera.main;
+			Camera startingCamera = (defaultCamera) ? defaultCamera : Camera.main;
 			for (int i = 0; i < cameras.Length; i++) {
 				Camera curCamera = cameras [i];
-				if (curCamera == mainCamera) {
+				if (curCamera == startingCamera) {
 					cameras [i] = cameras [0];
 					cameras [0] = curCamera;
+					curCamera.enabled = true;
 				} else {
 					curCamera.enabled = false;
 				}
