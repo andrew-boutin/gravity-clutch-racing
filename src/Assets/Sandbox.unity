@@ -1447,9 +1447,9 @@ MonoBehaviour:
 
     `a` left, `d` right, `s` brake
 
-    `left arrow` change gravity clockwise
+    `left arrow` roll gravity left
 
-    `right arrow` change gravity counter clockwise
+    `right arrow` roll gravity right
 
     `up arrow` invert gravity
 

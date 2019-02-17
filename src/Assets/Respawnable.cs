@@ -11,6 +11,7 @@ public class Respawnable : MonoBehaviour {
 	private Quaternion spawnRotation;
 	private Rigidbody rb;
 
+	[Tooltip("Subscribe a function to this event to trigger that logic when a respawn occurs.")]
 	[SerializeField]
 	private UnityEvent onRespawnEvent;
 

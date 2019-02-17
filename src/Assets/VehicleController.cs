@@ -9,25 +9,29 @@ public class VehicleController : MonoBehaviour {
 	private GravityShiftable gravityShiftable;
 	private Rigidbody rb;
 
-	private bool brake;
+	private bool brake = false;
 
-	private bool rotate;
+	private bool rotate = false;
 
+	private bool grounded = false;
+
+	[Tooltip("Used to determine how fast the vehicle brakes.")]
 	[SerializeField]
 	private float BrakeDamper = 0.95f;
 
+	[Tooltip("Used to determine when the vehicle's forward velocity should zero out when braking has almost stopped the vehicle.")]
 	[SerializeField]
 	private float BrakeBreakPoint = 0.5f;
 
+	[Tooltip("Used for determining how fast the vehicle moves forward.")]
 	[SerializeField]
 	private float ForwardSpeedFactor = 20.0f;
 
+	[Tooltip("Used for determining how fast the vehicle can turn left and right.")]
 	[SerializeField]
 	private float TurnSpeedFactor = 10.0f;
 
-	[SerializeField]
-	private float RotationBreakPoint = 0.5f;
-
+	[Tooltip("Affects how fast the vehicle rotates when gravity shifts.")]
 	[SerializeField]
 	private float RotationSpeed = 5.0f;
 
@@ -37,11 +41,23 @@ public class VehicleController : MonoBehaviour {
 	void Start () {
 		gravityShiftable = GetComponent<GravityShiftable> ();
 		rb = GetComponent<Rigidbody> ();
-		brake = false;
-		rotate = false;
 	}
 
 	void FixedUpdate() {
+		// Handle rotating the vehicle.
+		if (rotate) {
+			transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, RotationSpeed);
+
+			if (transform.rotation == targetRotation) {
+				rotate = false;
+			}
+		}
+
+		// Bail out early if the vehicle isn't on the ground.
+		if (!grounded) {
+			return;
+		}
+
 		// We're either braking or defaulting to forward movement.
 		if (brake) {
 			rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y, rb.velocity.z * BrakeDamper);
@@ -52,26 +68,20 @@ public class VehicleController : MonoBehaviour {
 				rb.velocity = new Vector3(rb.velocity.x, rb.velocity.y, 0);
 			}
 		} else {
-			// TODO: Only do this if "grounded".
 			rb.AddForce(Vector3.forward * rb.mass * ForwardSpeedFactor);
-		}
-
-		// Handle rotating the vehicle.
-		if (rotate) {
-			transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, RotationSpeed);
-
-			if (transform.rotation == targetRotation) {
-				rotate = false;
-			}
 		}
 	}
 
 	public void MoveRight() {
-		rb.AddForce(transform.right * rb.mass * TurnSpeedFactor);
+		if (grounded) {
+			rb.AddForce(transform.right * rb.mass * TurnSpeedFactor);
+		}
 	}
 
 	public void MoveLeft() {
-		rb.AddForce((-transform.right) * rb.mass * TurnSpeedFactor);
+		if (grounded) {
+			rb.AddForce ((-transform.right) * rb.mass * TurnSpeedFactor);
+		}
 	}
 
 	public void ApplyBrake() {
@@ -103,5 +113,13 @@ public class VehicleController : MonoBehaviour {
 	public void ShiftGravityCounterClockwise() {
 		gravityShiftable.ShiftGravityCounterClockwise ();
 		rotateWithGravity ();
+	}
+
+	public void SetGrounded() {
+		grounded = true;
+	}
+
+	public void SetDeGrounded() {
+		grounded = false;
 	}
 }

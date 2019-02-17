@@ -11,11 +11,13 @@ using UnityEngine.Events;
 public class GravityShiftable : MonoBehaviour {
 	private Rigidbody rb;
 
-	public enum GravityDirection { Down, Up, Left, Right };
+	private enum GravityDirection { Down, Up, Left, Right };
 
+	[Tooltip("Subscribe a function to this event so that it triggers when gravity shifts.")]
 	[SerializeField]
 	private UnityEvent onGravityChange;
 
+	[Tooltip("Determines which direction gravity starts out in.")]
 	[SerializeField]
 	private GravityDirection StartingGravityDirection = GravityDirection.Down;
 

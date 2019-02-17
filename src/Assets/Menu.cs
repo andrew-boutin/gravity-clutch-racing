@@ -6,6 +6,7 @@ public class Menu : MonoBehaviour {
 	private bool paused;
 	private float timeScale;
 
+	[Tooltip("The object that is used as a pause menu.")]
 	[SerializeField]
 	private GameObject pausedMenuObject;
 
