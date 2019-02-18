@@ -95,6 +95,7 @@ GameObject:
   - component: {fileID: 54899520288691418}
   - component: {fileID: 114040840774537700}
   - component: {fileID: 114106891390019144}
+  - component: {fileID: 114510426799280082}
   m_Layer: 0
   m_Name: AI
   m_TagString: Untagged
@@ -1032,6 +1033,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dfd4f6ab9ffc043c9872c904f35afcf9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  BrakeDamper: 0.95
+  BrakeBreakPoint: 0.5
+  ForwardSpeedFactor: 20
+  TurnSpeedFactor: 10
+  RotationSpeed: 5
 --- !u!114 &114106891390019144
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1054,6 +1060,51 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5076a47d71e164c3da12c067db841412, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  defaultCamera: {fileID: 0}
+--- !u!114 &114510426799280082
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1417811039119814}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d7f99f1b584c4695af49d3049128add, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  groundClearance: 1
+  onDeGrounding:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 114040840774537700}
+        m_MethodName: SetDeGrounded
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+  onGrounding:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 114040840774537700}
+        m_MethodName: SetGrounded
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
 --- !u!114 &114668900800617798
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1092,6 +1143,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 616563c4d87b248feba0572a4b7b85a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  onGravityChange:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
   StartingGravityDirection: 0
 --- !u!135 &135154860186018430
 SphereCollider:
