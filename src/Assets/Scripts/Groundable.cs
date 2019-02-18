@@ -23,11 +23,9 @@ public class Groundable : MonoBehaviour {
 	void Start() {
 		grounded = CheckIfGrounded ();
 		if (grounded) {
-			Debug.Log ("On start grounded.");
 			onGrounding.Invoke();
 		} else {
 			onDeGrounding.Invoke();
-			Debug.Log ("On start not grounded.");
 		}
 	}
 
@@ -38,10 +36,8 @@ public class Groundable : MonoBehaviour {
 
 		// Fire off the appropriate Unity event if we're changing grounded states either way.
 		if (grounded && !wasGrounded) {
-			Debug.Log ("Switching to grounded.");
 			onGrounding.Invoke();
 		} else if(!grounded && wasGrounded) {
-			Debug.Log ("Switching to not grounded.");
 			onDeGrounding.Invoke();
 		}
 	}

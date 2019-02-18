@@ -40,7 +40,7 @@ GameObject:
   - component: {fileID: 114180708205367092}
   - component: {fileID: 114566442116720492}
   m_Layer: 5
-  m_Name: Gravity Compass
+  m_Name: Gravity Arrow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -72,7 +72,7 @@ GameObject:
   - component: {fileID: 222608463820676884}
   - component: {fileID: 114007991935388132}
   m_Layer: 5
-  m_Name: G
+  m_Name: Gravity Symbol
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -285,7 +285,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2c4495db21ec445db97c806924ca589, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 0}
 --- !u!114 &114664356695985876
 MonoBehaviour:
   m_ObjectHideFlags: 1
